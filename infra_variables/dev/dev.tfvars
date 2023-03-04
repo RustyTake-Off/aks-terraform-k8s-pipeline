@@ -1,4 +1,4 @@
-SSHPubKeyPath = "~/.ssh/id_rsa.pub"
+# SSHPubKeyPath = "~/.ssh/id_rsa.pub"
 Aks = {
   Suffix   = "aztfpro02"
   Location = "westeurope"

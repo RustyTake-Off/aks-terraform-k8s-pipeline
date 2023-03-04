@@ -1,3 +1,4 @@
+# Terraform Validate Job
 jobs:
   - job:
     steps:
@@ -21,7 +22,7 @@ jobs:
       # Terraform Validate Task
       - task: TerraformTaskV4@4
         displayName: "Validate Terraform"
-        condition: succeededOrFailed()
+        condition: and(succeededOrFailed(), eq(variables['action'], 'Validate'))
         inputs:
           provider: "azurerm"
           command: "validate"
@@ -29,7 +30,7 @@ jobs:
       # Terraform Plan Task
       - task: TerraformTaskV4@4
         displayName: "Plan Terraform"
-        condition: and(succeededOrFailed(), eq(variables['action'], 'Plan'))
+        condition: and(succeededOrFailed(), eq(variables['action'], 'Validate'))
         inputs:
           provider: "azurerm"
           command: "plan"

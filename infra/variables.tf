@@ -1,9 +1,9 @@
 ####################################################################################################
 # Variables
-variable "SSHPubKeyPath" {
+/*variable "SSHPubKeyPath" {
   description = "Path to your SSH Key."
   default     = "~/.ssh/id_rsa.pub"
-}
+}*/
 variable "Aks" {
   description = "Resources configuration"
   default = {
@@ -28,7 +28,7 @@ variable "Aks" {
 
     KubeVersion      = "1.24.6"
     DefaultNodeVMSku = "Standard_B2s"
-    AksAdminName     = "myaksadmin"
+    # AksAdminName     = "myaksadmin"
 
     NetworkPlugin    = "azure"
     ServiceCIDR      = "10.0.100.0/22"

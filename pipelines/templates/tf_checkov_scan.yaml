@@ -1,13 +1,31 @@
+# Terraform Checkov Job
 jobs:
   - job:
     steps:
+      # Terraform Install Task
+      - task: TerraformInstaller@1
+        displayName: "Installing Terraform"
+        inputs:
+          terraformVersion: "${{ parameters.terraformVersion }}"
+      # Terraform Init Task
+      - task: TerraformTaskV4@4
+        displayName: "Initializing Terraform"
+        inputs:
+          provider: "azurerm"
+          command: "init"
+          backendServiceArm: "${{ parameters.backendServiceArm }}"
+          backendAzureRmResourceGroupName: "${{ parameters.backendAzureRmResourceGroupName }}"
+          backendAzureRmStorageAccountName: "${{ parameters.backendAzureRmStorageAccountName }}"
+          backendAzureRmContainerName: "${{ parameters.backendAzureRmContainerName }}"
+          backendAzureRmKey: "${{ parameters.backendAzureRmKey }}"
+          workingDirectory: "${{ parameters.workingDirectory }}"
       # Pull Checkov Image and Scan Directory
       - script: |
           docker pull bridgecrew/checkov
           docker run -v $(System.DefaultWorkingDirectory):$(System.DefaultWorkingDirectory) bridgecrew/checkov --directory ${{ parameters.workingDirectory }} --output junitxml > $(System.DefaultWorkingDirectory)/checkov-scan-report.xml
           docker run -v $(System.DefaultWorkingDirectory):$(System.DefaultWorkingDirectory) bridgecrew/checkov --directory ${{ parameters.workingDirectory }}
         displayName: "Checkov Scan"
-        condition: always()
+        condition: and(always(), eq(variables['action'], 'Checkov'))
       # Publish Checkov Artifacts
       - task: PublishBuildArtifacts@1
         displayName: "Publish Artifact: Checkov Report"

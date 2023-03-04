@@ -160,10 +160,10 @@ resource "azurerm_kubernetes_cluster" "Aks" {
   }
 
   linux_profile {
-    admin_username = var.Aks.AksAdminName
+    admin_username = try(var.Aks.AksAdminName, null)
 
     ssh_key {
-      key_data = file(var.SSHPubKeyPath)
+      key_data = try(file(var.SSHPubKeyPath), null)
     }
   }
 
