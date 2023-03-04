@@ -1,0 +1,28 @@
+jobs:
+  - job:
+    steps:
+      # Pull Checkov Image and Scan Directory
+      - script: |
+          docker pull bridgecrew/checkov
+          docker run -v $(System.DefaultWorkingDirectory):$(System.DefaultWorkingDirectory) bridgecrew/checkov --directory ${{ parameters.workingDirectory }} --output junitxml > $(System.DefaultWorkingDirectory)/checkov-scan-report.xml
+          docker run -v $(System.DefaultWorkingDirectory):$(System.DefaultWorkingDirectory) bridgecrew/checkov --directory ${{ parameters.workingDirectory }}
+        displayName: "Checkov Scan"
+        condition: always()
+      # Publish Checkov Artifacts
+      - task: PublishBuildArtifacts@1
+        displayName: "Publish Artifact: Checkov Report"
+        inputs:
+          PathtoPublish: "$(System.DefaultWorkingDirectory)"
+          ArtifactName: CheckovReport
+        condition: succeededOrFailed()
+      # Publish Checkov Test Results
+      - task: PublishTestResults@2
+        displayName: "Publish Checkov Test Results"
+        inputs:
+          testResultsFiles: "**/*checkov-scan-report.xml"
+          testRunTitle: "Checkov Scan"
+        condition: always()
+      # Remove Checkov Docker Image
+      - script: 'docker rmi "bridgecrew/checkov" -f | true'
+        displayName: "Remove Checkov Docker Images"
+        condition: always()
