@@ -1,0 +1,22 @@
+# K8s Apply Job
+jobs:
+  - job:
+    steps:
+      # Az, Kubectl Apply Task
+      - task: AzureCLI@2
+        displayName: "Kubectl Apply Task"
+        inputs:
+          azureSubscription: "${{ parameters.backendServiceArm }}"
+          scriptType: bash
+          scriptLocation: inlineScript
+          addSpnToEnvironment: true
+          inlineScript: |
+            #!/usr/bin/env bash
+            set -x
+            AKS_RG="rgaztfpro05"
+            AKS_NAME="aksaztfpro05"
+
+            # Get AKS Credentials
+            az aks get-credentials -g $AKS_RG -n $AKS_NAME
+
+            kubectl apply -f $(System.DefaultWorkingDirectory)/k8s/

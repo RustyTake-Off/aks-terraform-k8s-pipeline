@@ -9,7 +9,7 @@ parameters:
   - name: Action
     displayName: Action
     type: string
-    default: "Validate"
+    default: "Plan"
     values:
       - Checkov
       - Validate
@@ -53,6 +53,7 @@ stages:
           terraformVersion: ${{ variables.terraformVersion }}
   # Checkov Scan
   - stage: tf_checkov_scan
+    dependsOn: [terraform_validate]
     condition: ne('${{ parameters.Action }}', 'Destroy')
     jobs:
       - template: templates/tf_checkov_scan.yaml
@@ -66,7 +67,7 @@ stages:
           terraformVersion: ${{ variables.terraformVersion }}
   # Terraform Plan Stage
   - stage: terraform_plan
-    dependsOn: [terraform_validate]
+    dependsOn: [tf_checkov_scan]
     condition: ne('${{ parameters.Action }}', 'Destroy')
     jobs:
       - template: templates/terraform-plan.yaml
@@ -92,6 +93,14 @@ stages:
           backendAzureRmKey: ${{ variables.backendAzureRmKey }}
           environment: ${{ variables.environment }}
           terraformVersion: ${{ variables.terraformVersion }}
+  # K8s Apply Stage
+  - stage: k8s_apply
+    dependsOn: [terraform_apply]
+    condition: ne('${{ parameters.Action }}', 'Destroy')
+    jobs:
+      - template: templates/terraform-apply.yaml
+        parameters:
+          backendServiceArm: ${{ variables.backendServiceArm }}
   # Terraform Destroy Stage
   - stage: terraform_destroy
     condition: contains('${{ parameters.Action }}', 'Destroy')

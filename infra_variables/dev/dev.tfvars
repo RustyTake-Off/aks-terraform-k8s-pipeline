@@ -1,6 +1,6 @@
 # SSHPubKeyPath = "~/.ssh/id_rsa.pub"
 Aks = {
-  Suffix   = "aztfpro02"
+  Suffix   = "aztfpro05"
   Location = "westeurope"
   RgName   = "rg"
   LawName  = "law"
