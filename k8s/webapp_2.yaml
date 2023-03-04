@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp-2
+  template:
+    metadata:
+      labels:
+        app: webapp-2
+    spec:
+      containers:
+        - name: webapp-2
+          image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          env:
+            - name: TITLE
+              valueFrom:
+                configMapKeyRef:
+                  name: webapps-cm
+                  key: TITLE_webapp_2
+      tolerations:
+        - key: "node"
+          operator: "Equal"
+          value: "worker"
+          effect: "PreferNoSchedule"
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: mini
+                    operator: In
+                    values:
+                      - project
+              topologyKey: topology.kubernetes.io/hostname
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-2-srv
+spec:
+  selector:
+    app: webapp-2
+  type: ClusterIP
+  ports:
+    - port: 80
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: webapp-2-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: webapp-2
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 20
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 30
