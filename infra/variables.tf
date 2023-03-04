@@ -8,11 +8,10 @@ variable "Aks" {
   description = "Resources configuration"
   default = {
 
-    Suffix   = "aztfpro02"
+    Suffix   = "aztfpro05"
     Location = "westeurope"
     RgName   = "rg"
     LawName  = "law"
-    AcrName  = "acr"
     Tags = {
       Env = "DefaultEnv"
     }

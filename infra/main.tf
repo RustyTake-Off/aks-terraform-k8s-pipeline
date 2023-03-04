@@ -17,12 +17,12 @@ terraform {
 
   ##################################################
   # Backend
-  /*backend "azurerm" {
-    resource_group_name  = ""
-    storage_account_name = ""
-    container_name       = ""
-    key                  = ""
-  }*/
+  backend "azurerm" {
+    resource_group_name  = "prrgazpro05"
+    storage_account_name = "prstraccazpro05"
+    container_name       = "prcontazpro05"
+    key                  = "aztfpro05"
+  }
 }
 
 ####################################################################################################
