@@ -56,7 +56,7 @@ Kubernetes is deployed with its own template that can be placed after terraform 
 
 There's also a template for Checkov which scans Terraform code for any misconfigurations and potential vulnerabilities. It's best to run security scans before deploying resources.
 
-Change all the necessary [variables]().
+Change all the necessary [variables](https://github.com/RustyTake-Off/aks-terraform-k8s-pipeline/blob/main/pipelines/ado_pipeline.yaml).
 
 ```yaml
 variables:
