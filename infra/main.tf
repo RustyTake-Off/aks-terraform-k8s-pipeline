@@ -17,21 +17,22 @@ terraform {
 
   ##################################################
   # Backend
-  backend "azurerm" {
+  /*backend "azurerm" {
     resource_group_name  = "prrgazpro05"
     storage_account_name = "prstraccazpro05"
     container_name       = "prcontazpro05"
     key                  = "aztfpro05"
-  }
+  }*/
 }
 
 ####################################################################################################
 # Provider configuration
 provider "azurerm" {
-  /*tenant_id       = var.ARM_TENANT_ID
+  /*
+  tenant_id       = var.ARM_TENANT_ID
   subscription_id = var.ARM_SUBSCRIPTION_ID
   client_id       = var.ARM_CLIENT_ID
   client_secret   = var.ARM_CLIENT_SECRET
-*/
+  */
   features {}
 }
