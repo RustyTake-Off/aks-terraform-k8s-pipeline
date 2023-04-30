@@ -4,7 +4,7 @@ Remember to look around all the folders, files and change things to your own lik
 
 ## [Projects](https://github.com/RustyTake-Off/projects)
 
-[Project] - Create an AKS cluster with Terraform and deploy K8s to it using pipelines constructed out of template files.
+Create an AKS cluster with Terraform and deploy K8s to it using pipelines constructed out of template files.
 
 ## Prerequisites
 
